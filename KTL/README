@@ -1,0 +1,19 @@
+## KTL (Kun's Template Library), a mimic of STL
+
+# components
+
+> * allocator
+> * iterator
+> * container
+> * algorithms
+> * functor
+> * adapter
+
+# how to compile
+
+```bash
+$ mkdir install
+$ cd install
+$ cmake ..
+$ make
+```
