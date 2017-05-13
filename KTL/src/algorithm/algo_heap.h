@@ -33,20 +33,19 @@ inline void push_heap(RandomAccessIterator first, RandomAccessIterator last) {
 
 template <class RandomAccessIterator, class T, class Distance>
 void __adjust_heap(RandomAccessIterator first, Distance holeIndex, Distance len, T value) {
-    Distance topIndex = holeIndex;
-    Distance targetChild = 2 * (holeIndex + 1);
+    Distance targetChild = 2 * holeIndex + 1;  // init to left child
     while (targetChild < len) {
-        if (*(first + targetChild) < *(first + (targetChild - 1))) targetChild--;
+        if (targetChild + 1 < len && *(first + targetChild) < *(first + (targetChild + 1))) targetChild++;
         // move targetChild up to hole position
-        *(first + holeIndex) = *(first + targetChild);
-        holeIndex = targetChild;
-        targetChild = 2 * (targetChild + 1);
+        if (value < *(first + targetChild)) {
+            *(first + holeIndex) = *(first + targetChild);
+            holeIndex = targetChild;
+            targetChild = 2 * targetChild + 1;  // left child
+        } else {
+            break;
+        }
     }
-    if (targetChild == len) {  // no right child, only left
-        *(first + holeIndex) = *(first + (targetChild - 1));
-        holeIndex = targetChild - 1;
-    }
-    __push_heap(first, holeIndex, topIndex, value);
+    *(first + holeIndex) = value;
 }
 
 template <class RandomAccessIterator, class T, class Distance>

@@ -111,6 +111,68 @@ template <class Iterator>
 inline typename iterator_traits<Iterator>::difference_type* difference_type(const Iterator& It) {
     return static_cast<typename iterator_traits<Iterator>::difference_type*>(0);
 }
+
+template <class Iterator>
+class reverse_iterator_ {
+protected:
+    Iterator current;  // corresponding forward direction iterator
+public:
+    typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+    typedef typename iterator_traits<Iterator>::value_type value_type;
+    typedef typename iterator_traits<Iterator>::difference_type difference_type;
+    typedef typename iterator_traits<Iterator>::pointer pointer;
+    typedef typename iterator_traits<Iterator>::reference reference;
+    typedef Iterator iterator_type;
+    typedef reverse_iterator_<Iterator> self;
+
+public:
+    reverse_iterator_() {}
+    explicit reverse_iterator_(iterator_type x) : current(x) {}
+    reverse_iterator_(const self& x) : current(x.current) {}
+
+    iterator_type base() const { return current; }  // get forward iterator
+    reference operator*() const {
+        Iterator tmp = current;
+        return *--tmp;  // magic!!! get left side of orignal forward iterator
+    }
+    pointer operator->() const { return &(operator*()); }
+
+    self& operator++() {
+        --current;
+        return *this;
+    }
+    self operator++(int) {
+        self tmp = *this;
+        --current;
+        return tmp;
+    }
+    self& operator--() {
+        ++current;
+        return *this;
+    }
+    self operator--(int) {
+        self tmp = *this;
+        ++current;
+        return *this;
+    }
+
+    self operator+(difference_type n) const { return self(current - n); }
+    self& operator+=(difference_type n) {
+        current -= n;
+        return *this;
+    }
+
+    self operator-(difference_type n) const { return self(current + n); }
+    self& operator-=(difference_type n) {
+        current += n;
+        return *this;
+    }
+
+    reference operator[](difference_type n) const { return *(*this + n); }
+    bool operator==(const self& x) const { return current == x.current; }
+    bool operator!=(const self& x) const { return current != x.current; }
+    bool operator<(const self& x) const { return current < x.current; }
+};
 }
 
 #endif

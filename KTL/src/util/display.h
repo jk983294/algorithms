@@ -2,9 +2,10 @@
 #define DISPLAY_H
 
 #include <iostream>
+#include "pair.h"
 
 template <typename T, typename U>
-std::ostream& operator<<(std::ostream& out, const std::pair<T, U>& p) {
+std::ostream& operator<<(std::ostream& out, const ktl::pair<T, U>& p) {
     out << "[" << p.first << ", " << p.second << "]";
     return out;
 }

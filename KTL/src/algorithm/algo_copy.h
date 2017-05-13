@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cstring>
+#include "../iterator/insert_iterator.h"
 #include "../iterator/iterator.h"
 #include "../iterator/typetraits.h"
 #include "algo_common.h"
@@ -64,6 +65,24 @@ inline wchar_t *copy(wchar_t *first, wchar_t *last, wchar_t *result) {
     auto dist = last - first;
     memcpy(result, first, sizeof(*first) * dist);
     return result + dist;
+}
+
+// specialization for InsertIterator, InsertIterator itself manage its pointer position
+template <class InputIterator, class InsertIterator>
+InsertIterator __copy_inserter(InputIterator first, InputIterator last, InsertIterator result) {
+    while (first != last) {
+        *result = *first;
+        ++first;
+    }
+    return result;
+}
+template <class InputIterator, class C>
+back_insert_iterator<C> copy(InputIterator first, InputIterator last, back_insert_iterator<C> result) {
+    return __copy_inserter(first, last, result);
+}
+template <class InputIterator, class C>
+front_insert_iterator<C> copy(InputIterator first, InputIterator last, front_insert_iterator<C> result) {
+    return __copy_inserter(first, last, result);
 }
 }
 

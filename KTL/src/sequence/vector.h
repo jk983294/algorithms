@@ -20,6 +20,7 @@ public:
     typedef T& reference;
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
+    typedef reverse_iterator_<iterator> reverse_iterator;
 
 protected:
     typedef simple_alloc<value_type, Alloc> data_allocator;
@@ -51,6 +52,9 @@ protected:
 public:
     iterator begin() const { return start_; }
     iterator end() const { return finish_; }
+    reverse_iterator rbegin() { return reverse_iterator(end()); }
+    reverse_iterator rend() { return reverse_iterator(begin()); }
+
     size_type size() const { return size_type(end() - begin()); }
     size_type capacity() const { return size_type(end_of_storage_ - begin()); }
     bool empty() const { return begin() == end(); }
@@ -76,6 +80,12 @@ public:
         finish_ = ktl::copy(start_v, end_v, start_);
     }
     explicit vector(size_type n) { fill_initialize(n, T()); }
+
+    template <class InputIterator>
+    vector(InputIterator first, InputIterator last) {
+        fill_initialize(last - first, T());  // also works for POD, int() == 0
+        finish_ = ktl::copy(first, last, start_);
+    }
 
     ~vector() {
         destroy(start_, finish_);  // call destructor of each object for non-POD

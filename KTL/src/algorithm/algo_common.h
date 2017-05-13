@@ -69,6 +69,13 @@ void advance(InputIterator &it, Distance n) {
     typedef typename iterator_traits<InputIterator>::iterator_category iterator_category;
     _advance(it, n, iterator_category());
 }
+
+template <class T>
+void swap(T &x, T &y) {
+    T tmp = x;
+    x = y;
+    y = tmp;
+}
 }
 
 #endif

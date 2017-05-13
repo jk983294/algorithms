@@ -1,5 +1,5 @@
-#ifndef _ALGORITHM_COPY_H_
-#define _ALGORITHM_COPY_H_
+#ifndef _ALGORITHM_EQUAL_H_
+#define _ALGORITHM_EQUAL_H_
 
 #include <cassert>
 #include <cstring>
