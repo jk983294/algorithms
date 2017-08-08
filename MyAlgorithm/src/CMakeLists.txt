@@ -1,0 +1,1 @@
+add_library(AlgoModule math/MaxSumSubVector.cpp)
