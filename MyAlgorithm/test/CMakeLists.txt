@@ -29,12 +29,19 @@ set(tests
         dynamic_programming/TestViterbi.cpp
         string/TestKmp.cpp
         string/TestTrieTree.cpp
+        pattern/disruptor/TestRingBuffer.cpp
+        pattern/disruptor/TestSequence.cpp
+        pattern/disruptor/TestClaimStrategy.cpp
+        pattern/disruptor/TestWaitStrategy.cpp
+        pattern/disruptor/TestSequenceBarrier.cpp
+        pattern/disruptor/TestSequencer.cpp
         )
 
 enable_testing()
 
 add_executable(test.algo ${tests})
 target_link_libraries(test.algo AlgoModule)
+target_link_libraries(test.algo pthread)
 
 install(FILES heuristic/AStarMap.txt DESTINATION /var/tmp/test/)
 install(FILES heuristic/AStarMap1.txt DESTINATION /var/tmp/test/)
