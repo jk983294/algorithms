@@ -4,10 +4,14 @@ set(tests
         main.cpp
         math/TestMaxSumSubVector.cpp
         math/TestPostfixExpression.cpp
+        math/TestReverseInteger.cpp
+        math/TestMaxSubMatrix.cpp
+        math/TestMaxLengthSubArray.cpp
         brutal_force/TestAddFactor.cpp
         data_structure/TestHashTable.cpp
         data_structure/TestSet.cpp
         data_structure/TestSort.cpp
+        data_structure/TestSingleList.cpp
         data_structure/tree/TestBinaryTree.cpp
         data_structure/tree/TestBinarySearchTree.cpp
         data_structure/tree/TestLeftist.cpp
@@ -17,6 +21,8 @@ set(tests
         data_structure/heap/TestBinomialHeap.cpp
         data_structure/heap/TestDeap.cpp
         data_structure/heap/TestFibonacciHeap.cpp
+        data_structure/stack/TestMinStack.cpp
+        data_structure/deque/TestWindowMax.cpp
         data_structure/graph/TestDag.cpp
         data_structure/graph/TestDenseGraph.cpp
         data_structure/graph/TestSparseGraph.cpp
@@ -27,6 +33,7 @@ set(tests
         dynamic_programming/TestLongestCommonString.cpp
         dynamic_programming/TestMatrixMultiple.cpp
         dynamic_programming/TestViterbi.cpp
+        dynamic_programming/TestMinSumPathOfMatrix.cpp
         string/TestKmp.cpp
         string/TestTrieTree.cpp
         pattern/disruptor/TestRingBuffer.cpp

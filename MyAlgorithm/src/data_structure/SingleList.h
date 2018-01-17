@@ -25,6 +25,8 @@ public:
     bool removeAll(T &t);
     void clear();
     int size();
+    SingleListNode<T> *remove_last_kth_element(int k);
+    void reverse();
 
 public:
     int m_nListDataCount;
@@ -112,6 +114,45 @@ void SingleList<T>::clear() {
         cur = next;
     }
     m_head = nullptr;
+    m_nListDataCount = 0;
+}
+
+template <class T>
+SingleListNode<T> *SingleList<T>::remove_last_kth_element(int k) {
+    SingleListNode<T> *result = nullptr;
+    if (k <= 0 || m_nListDataCount < k)
+        return nullptr;
+    else if (m_nListDataCount == k) {
+        result = m_head;
+        m_head = m_head->next;
+    } else {
+        int step = m_nListDataCount - k - 1;
+        SingleListNode<T> *pre = m_head;
+        while (step) {
+            pre = pre->next;
+            --step;
+        }
+        result = pre->next;
+        pre->next = result->next;
+    }
+    --m_nListDataCount;
+    return result;
+}
+
+template <class T>
+void SingleList<T>::reverse() {
+    if (m_nListDataCount <= 1) return;
+    SingleListNode<T> *pre = m_head;
+    SingleListNode<T> *cur = m_head->next;
+    SingleListNode<T> *next = cur->next;
+    m_head->next = nullptr;
+    while (cur) {
+        next = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = next;
+    }
+    m_head = pre;
 }
 
 #endif

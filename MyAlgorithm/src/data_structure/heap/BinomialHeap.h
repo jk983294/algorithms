@@ -59,9 +59,9 @@ public:
     void union_heap(MinBinomialHeap<T> &h2);  // h2合并到this
     BiHeapNode<T> *minimum();                 // 找heap中最下元素节点，没有返回nullptr
     void insertKey(T key);
-    bool deleteMin(T &ret);          // 删除的值放在ret中，堆中无数据返回false,遍历根节点即可O(lgn)
-    bool deleteKey(T key);           // 删除任意key节点
-    BiHeapNode<T> *findNode(T key);  // 返回key在heap中的位置
+    bool deleteMin(T &ret);  // 删除的值放在ret中，堆中无数据返回false,遍历根节点即可O(lgn)
+    bool deleteKey(T key);   // 删除任意key节点
+    BiHeapNode<T> *findNode(T key);         // 返回key在heap中的位置
     bool decrease_key(T oldKey, T newKey);  // 修改oldKey为newKey  修改完后调maintainHeap,向上冒泡O(lgn)
     void print();
 

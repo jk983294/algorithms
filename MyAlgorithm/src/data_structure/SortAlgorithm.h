@@ -87,7 +87,7 @@ void SortAlgorithm<T>::quickSort(int left, int right) {  // [left, right]
             } while (i <= right && data[i] < pivot);
             do {
                 j--;
-            } while (j >= 0 && data[j] > pivot);
+            } while (j >= left && data[j] > pivot);
             if (i < j) swap(i, j);
         } while (i < j);
         swap(left, j);
