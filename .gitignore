@@ -1,3 +1,4 @@
 .idea/
-/MyAlgorithm/cmake-build-debug/
+cmake-build-debug/
 *.pyc
+*.gch
