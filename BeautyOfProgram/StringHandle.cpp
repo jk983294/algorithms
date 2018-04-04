@@ -1,0 +1,101 @@
+#include "MyUtility.h"
+
+void basic_string_app();
+void longest_palindrome_sub_string();               // 最长回文子串  Manacher算法
+bool str_contain_circle_shift(string a, string b);  // 字符串移位包含问题
+int similarity_of_two_string(string a, string b);  // 两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
+int similarity_of_two_string(string &a, int aBegin, int aEnd, string &b, int bBegin, int bEnd);
+
+int main() {
+    basic_string_app();
+    longest_palindrome_sub_string();                               // 最长回文串
+    cout << str_contain_circle_shift("AABCD", "CDAA") << endl;     // 字符串移位包含问题 No. 3.1
+    cout << similarity_of_two_string("dfjsdf", "kdfasd") << endl;  // 字符串相似度 No. 3.3
+    return 0;
+}
+
+void longest_palindrome_sub_string() {
+    string source_str = "12212321";
+    char startChar = '$', delimiter = '#';  //起始符  分隔符
+    string newStr;
+    newStr += startChar;
+    newStr += delimiter;
+    for (auto itr = source_str.begin(); itr != source_str.end(); ++itr) {
+        newStr += *itr;
+        newStr += delimiter;
+    }
+    cout << newStr << endl;
+    int size1 = newStr.size();
+    vector<int> p(size1, 0);
+    int mx = 0, id = 0;
+    for (int i = 1; i < size1; ++i) {
+        if (mx > i)
+            p[i] = min(p[2 * id - i], mx - i);  //在边界mx内
+        else
+            p[i] = 1;  // p[i]超出边界mx，设置为1，然后慢慢累加计算长度
+        while (i + p[i] < size1 && newStr[i - p[i]] == newStr[i + p[i]]) ++p[i];
+        if (i + p[i] > mx) {  //更新边界mx以及当前最大回文子串的中心id
+            mx = i + p[i];
+            id = i;
+        }
+    }
+    int maxLen = 0, ii;
+    for (int i = 1; i < size1; ++i) {
+        if (p[i] > maxLen) {
+            ii = i;
+            maxLen = p[i];
+        }
+    }
+    maxLen--;
+    string maxSubString;
+    int start = ii - maxLen;
+    int end = ii + maxLen;
+    for (int i = start; i <= end; ++i) {
+        if (newStr[i] != delimiter) maxSubString += newStr[i];
+    }
+    cout << maxSubString << endl;
+}
+
+int similarity_of_two_string(string &a, int aBegin, int aEnd, string &b, int bBegin, int bEnd) {
+    if (aBegin >= aEnd) {
+        return bEnd - bBegin;
+    } else if (bBegin >= bEnd) {
+        return aEnd - aBegin;
+    } else if (a[aBegin] == b[bBegin]) {
+        return similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin + 1, bEnd);
+    } else {
+        //将b[bBegin]拷到a串对应处  或者 将b[bBegin]在b中删除
+        int sim1 = similarity_of_two_string(a, aBegin, aEnd, b, bBegin + 1, bEnd);
+        //将a[aBegin]拷到b串对应处  或者 将a[aBegin]在a中删除
+        int sim2 = similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin, bEnd);
+        //将a[aBegin]修改为b[bBegin]  或者 将b[bBegin]修改为a[aBegin]
+        int sim3 = similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin + 1, bEnd);
+        return min(sim1, min(sim2, sim3)) + 1;
+    }
+}
+
+//两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
+int similarity_of_two_string(string a, string b) {
+    int lenA = a.size(), lenB = b.size();
+    return similarity_of_two_string(a, 0, lenA - 1, b, 0, lenB - 1);
+}
+
+//字符串移位包含问题
+bool str_contain_circle_shift(string a, string b) {
+    a += a;
+    cout << a << " " << b << endl;
+    return a.find(b) != a.npos;
+}
+
+void basic_string_app() {
+    int v[] = {3, 7, 4, 9, 5, 8, 1, 10, 13, 6, -1};
+    int size = sizeof(v) / sizeof(int);
+    vector<int> index1;
+    vector<int> x(v, v + size);
+    make_vector_index(index1, size);
+    cout << index1 << endl;
+    cout << x << endl;
+    quick_sort_with_original_order(x, index1, 0, size - 1);
+    cout << index1 << endl;
+    cout << x << endl;
+}

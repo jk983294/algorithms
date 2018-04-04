@@ -1,95 +1,111 @@
-#include "TreeHandle.h"
+#include "MyUtility.h"
 
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+    int leftMaxValue;   //左子树最长距离
+    int rightMaxValue;  //右子树最长距离
+};
 
-void levelorder(treenode* root){
-    if(root == NULL)    return;
-    queue<treenode*> q;
-    treenode* currentnode = root;
-    q.push(currentnode);
-    int levelcnt = 1 , nextlevelcnt = 0;
-    while(levelcnt > 0){
-        currentnode = q.front();
-        cout<<currentnode->data<<" ";
+void build_by_preorder_inorder();  //根据先序和中序遍历结果构建树
+//根据先序和中序遍历结果构建树
+TreeNode* build_by_preorder_inorder(vector<int>& preorder, vector<int>& inorder, int pStart, int pEnd, int iStart,
+                                    int iEnd);
+void level_order(TreeNode* root);              //按层次遍历
+void findMaxLen(TreeNode* root, int* maxLen);  //树中节点间的最大距离  No.3.8
+
+int main() {
+    build_by_preorder_inorder();  //重建二叉树 No. 3.9  层次遍历 No. 3.10
+    return 0;
+}
+
+void level_order(TreeNode* root) {
+    if (root == nullptr) return;
+    queue<TreeNode*> q;
+    TreeNode* currentNode = root;
+    q.push(currentNode);
+    int levelCnt = 1, nextLevelCnt = 0;
+    while (levelCnt > 0) {
+        currentNode = q.front();
+        cout << currentNode->data << " ";
         q.pop();
-        --levelcnt;
-        if(currentnode->left != NULL) {
-            q.push(currentnode->left);
-            ++nextlevelcnt;
+        --levelCnt;
+        if (currentNode->left != nullptr) {
+            q.push(currentNode->left);
+            ++nextLevelCnt;
         }
-        if(currentnode->right != NULL) {
-            q.push(currentnode->right);
-            ++nextlevelcnt;
+        if (currentNode->right != nullptr) {
+            q.push(currentNode->right);
+            ++nextLevelCnt;
         }
-        if (levelcnt == 0){
-            cout<<endl;
-            levelcnt = nextlevelcnt;
-            nextlevelcnt = 0;
+        if (levelCnt == 0) {
+            cout << endl;
+            levelCnt = nextLevelCnt;
+            nextLevelCnt = 0;
         }
     }
-    cout<<endl;
+    cout << endl;
 }
 //根据先序和中序遍历结果构建树
-void bulid_by_preorder_inorder(){
-    int apreoder[] = { 1, 2, 4, 3, 5, 6};
-    int ainoder[] = { 4, 2, 1, 5, 3, 6};
-    int len = sizeof(apreoder)/sizeof(int);
-    vector<int> preoder = to_vector(apreoder,len);
-    vector<int> inoder = to_vector(ainoder,len);
-    treenode* root = bulid_by_preorder_inorder(preoder,inoder,0,len-1,0,len-1);
-    cout<<root->data<<endl;
-    levelorder(root);
+void build_by_preorder_inorder() {
+    vector<int> preorder{1, 2, 4, 3, 5, 6};
+    vector<int> inorder{4, 2, 1, 5, 3, 6};
+    int len = preorder.size();
+    TreeNode* root = build_by_preorder_inorder(preorder, inorder, 0, len - 1, 0, len - 1);
+    cout << root->data << endl;
+    level_order(root);
 }
 //根据先序和中序遍历结果构建树
-treenode* bulid_by_preorder_inorder(vector<int> &preoder,vector<int> &inoder,int pstart,int pend,int istart,int iend){
-    treenode *root = new treenode;
-    root->data = preoder[pstart];
-    int inorder_index = find(inoder.begin(),inoder.end(),root->data) - inoder.begin();  //找到rootvalue在中序的位置
-    int len1 = inorder_index - istart;  //左子树大小
-    if(len1 > 0)    root->left = bulid_by_preorder_inorder(preoder,inoder,pstart+1,pstart+len1,istart,inorder_index-1);
-    else root->left = NULL;
-    int len2 = iend - inorder_index;    //右子树大小
-    if(len2 > 0)    root->right = bulid_by_preorder_inorder(preoder,inoder,pstart+1+len1,pend,inorder_index+1,iend);
-    else root->right = NULL;
+TreeNode* build_by_preorder_inorder(vector<int>& preorder, vector<int>& inorder, int pStart, int pEnd, int iStart,
+                                    int iEnd) {
+    TreeNode* root = new TreeNode;
+    root->data = preorder[pStart];
+    int inorderIndex = find(inorder.begin(), inorder.end(), root->data) - inorder.begin();  // 找到rootValue在中序的位置
+    int len1 = inorderIndex - iStart;                                                       // 左子树大小
+    if (len1 > 0)
+        root->left = build_by_preorder_inorder(preorder, inorder, pStart + 1, pStart + len1, iStart, inorderIndex - 1);
+    else
+        root->left = nullptr;
+    int len2 = iEnd - inorderIndex;  //右子树大小
+    if (len2 > 0)
+        root->right = build_by_preorder_inorder(preorder, inorder, pStart + 1 + len1, pEnd, inorderIndex + 1, iEnd);
+    else
+        root->right = nullptr;
     return root;
 }
-void findMaxLen(pNode root, int *maxLen) {
+void findMaxLen(TreeNode* root, int* maxLen) {
     //遍历到叶子结点，返回
-    if(root == NULL)
-        return;
+    if (root == nullptr) return;
 
     //如果左子树为空，那么该节点左边最长距离为0
-    if(root->left == NULL)
-        root->leftMaxValue = 0;
+    if (root->left == nullptr) root->leftMaxValue = 0;
 
     //如果右子树为空，那么该节点右边最长距离为0
-    if(root->right == NULL)
-        root->rightMaxValue = 0;
+    if (root->right == nullptr) root->rightMaxValue = 0;
 
     //如果左子树不为空，递归寻找左子树最长距离
-    if(root->left != NULL)
-        findMaxLen(root->left, maxLen);
+    if (root->left != nullptr) findMaxLen(root->left, maxLen);
 
     //如果右子树不为空，递归寻找右子树最长距离
-    if(root->right != NULL)
-        findMaxLen(root->right, maxLen);
+    if (root->right != nullptr) findMaxLen(root->right, maxLen);
 
     //计算左子树中距离根节点的最长距离
-    if(root->left != NULL) {
-        if(root->left->leftMaxValue > root->left->rightMaxValue)
+    if (root->left != nullptr) {
+        if (root->left->leftMaxValue > root->left->rightMaxValue)
             root->leftMaxValue = root->left->leftMaxValue + 1;
         else
             root->leftMaxValue = root->left->rightMaxValue + 1;
     }
 
     //计算右子树中距离根节点的最长距离
-    if(root->right != NULL) {
-        if(root->right->leftMaxValue > root->right->rightMaxValue)
+    if (root->right != nullptr) {
+        if (root->right->leftMaxValue > root->right->rightMaxValue)
             root->rightMaxValue = root->right->leftMaxValue + 1;
         else
             root->rightMaxValue = root->right->rightMaxValue + 1;
     }
 
     //更新最长距离
-    if(root->leftMaxValue + root->rightMaxValue > *maxLen)
-        *maxLen = root->leftMaxValue + root->rightMaxValue;
+    if (root->leftMaxValue + root->rightMaxValue > *maxLen) *maxLen = root->leftMaxValue + root->rightMaxValue;
 }

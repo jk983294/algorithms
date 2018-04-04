@@ -102,5 +102,5 @@ public:
 
     string str;
     string pattern;
-    vector<int> f;  // fail函数
+    vector<int> f;  // fail函数 f(i) 记录最大的k使得  p0...pk = pi-k...pi 找不到则为-1
 };

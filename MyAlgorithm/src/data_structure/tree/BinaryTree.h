@@ -53,22 +53,15 @@ public:
         isRecursive ? in_order_recursive(root) : in_order_iterative();
     }
 
-    void in_order_recursive(TreeNode<T> *currentNode);
-    void in_order_iterative();
-
     void pre_order() {  // 前序遍历
         iterateResult.clear();
         isRecursive ? pre_order_recursive(root) : pre_order_iterative();
     };
-    void pre_order_recursive(TreeNode<T> *currentNode);
-    void pre_order_iterative();
 
     void post_order() {  // 后续遍历
         iterateResult.clear();
         isRecursive ? post_order_recursive(root) : post_order_iterative();
     };
-    void post_order_recursive(TreeNode<T> *currentNode);
-    void post_order_iterative();
 
     void level_order();  // 按层次遍历
 
@@ -88,6 +81,14 @@ public:
 
     TreeNode<T> *max_sub_bst();
     MaxSubBstResult<T> max_sub_bst_internal(TreeNode<T> *node, MaxSubBstResult<T> &currentBest);
+
+private:
+    void in_order_recursive(TreeNode<T> *currentNode);
+    void pre_order_recursive(TreeNode<T> *currentNode);
+    void post_order_recursive(TreeNode<T> *currentNode);
+    void in_order_iterative();
+    void pre_order_iterative();
+    void post_order_iterative();
 
 public:
     bool isRecursive;  // 递归还是非递归,游标迭代 iterative
