@@ -17,10 +17,10 @@ inline void destroy(T *ptr) {
 
 // no action for POD
 template <class ForwardIterator>
-inline void _destory(ForwardIterator first, ForwardIterator last, _true_type) {}
+inline void _destroy(ForwardIterator first, ForwardIterator last, _true_type) {}
 
 template <class ForwardIterator>
-inline void _destory(ForwardIterator first, ForwardIterator last, _false_type) {
+inline void _destroy(ForwardIterator first, ForwardIterator last, _false_type) {
     for (; first != last; ++first) {
         destroy(&*first);
     }
@@ -29,7 +29,7 @@ inline void _destory(ForwardIterator first, ForwardIterator last, _false_type) {
 template <class ForwardIterator>
 inline void destroy(ForwardIterator first, ForwardIterator last) {
     typedef typename _type_traits<ForwardIterator>::is_POD_type is_POD;
-    _destory(first, last, is_POD());
+    _destroy(first, last, is_POD());
 }
 
 // specilization for char* wchar_t*

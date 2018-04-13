@@ -13,14 +13,12 @@
 
 using namespace std;
 
-const double BIGDOUBLE = 10e10;
 const int NEGA_BIG_INT = 0x80000001;  //最大负整数，补码表示
 const int POS_BIG_INT = 0x7fffffff;
 
 // make_two_dimension_vector(Type *array, int len, vector<Type>& v) // 创建二维vector数组
 // vector<Type> to_vector(Type *array, int len)                    // 一维指针数组转为vector
 // bool generate_all_k_choices(vector<int>& choice, int n, int k); // 每个决策有k的选择，有n个决策的所有组合 k^n
-// void make_vector_index(vector<int>& index, int count);          // 生成从0 ... N-1的序列
 // int count_sorted_array_range(vector<int> a, int startNum, int endNum);  // [startNum, endNum]之间的数有多少个
 
 inline int count_sorted_array_range(vector<int> a, int startNum, int endNum) {
@@ -49,11 +47,6 @@ inline bool generate_all_k_choices(vector<int>& choice, int n, int k) {
     return false;  // 遍历完毕，没有决策了
 }
 
-// 生成从0 ... N-1的序列
-inline void make_vector_index(vector<int>& index, int count) {
-    index.resize(count);
-    for (int i = 0; i < count; ++i) index[i] = i;
-}
 // 记录原次序的快排
 inline void quick_sort_with_original_order(vector<int>& a, vector<int>& index1, int left, int right) {
     if (left < right) {

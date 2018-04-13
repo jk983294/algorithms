@@ -5,7 +5,7 @@
 
 namespace ktl {
 
-/** alloc is SGI mechnism based.
+/** alloc is SGI mechanism based.
     it will manage small objects ( < 128 bytes) using 16 lists.
     each list contains the same block size nodes.
     requested size will be aligned to 8 bytes, then find its free list.

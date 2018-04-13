@@ -5,12 +5,14 @@ void longest_palindrome_sub_string();               // 最长回文子串  Manac
 bool str_contain_circle_shift(string a, string b);  // 字符串移位包含问题
 int similarity_of_two_string(string a, string b);  // 两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
 int similarity_of_two_string(string &a, int aBegin, int aEnd, string &b, int bBegin, int bEnd);
+void test_occurrence_in_matrix();  // optiver interview question 1
 
 int main() {
     basic_string_app();
     longest_palindrome_sub_string();                               // 最长回文串
     cout << str_contain_circle_shift("AABCD", "CDAA") << endl;     // 字符串移位包含问题 No. 3.1
     cout << similarity_of_two_string("dfjsdf", "kdfasd") << endl;  // 字符串相似度 No. 3.3
+    test_occurrence_in_matrix();
     return 0;
 }
 
@@ -88,14 +90,80 @@ bool str_contain_circle_shift(string a, string b) {
 }
 
 void basic_string_app() {
-    int v[] = {3, 7, 4, 9, 5, 8, 1, 10, 13, 6, -1};
-    int size = sizeof(v) / sizeof(int);
-    vector<int> index1;
-    vector<int> x(v, v + size);
-    make_vector_index(index1, size);
-    cout << index1 << endl;
+    vector<int> x{3, 7, 4, 9, 5, 8, 1, 10, 13, 6, -1};
+    int size = x.size();
+    vector<int> indexVector;
+    indexVector.resize(size);
+    std::iota(indexVector.begin(), indexVector.end(), 0);
+    cout << indexVector << endl;
     cout << x << endl;
-    quick_sort_with_original_order(x, index1, 0, size - 1);
-    cout << index1 << endl;
+    quick_sort_with_original_order(x, indexVector, 0, size - 1);
+    cout << indexVector << endl;
     cout << x << endl;
+    cout << "basic_string_app finish" << endl;
+}
+
+int getOptiverCount(string &str) {
+    static string pattern{"OPTIVER"};
+    static string pattern1{"REVITPO"};
+    static size_t strSize = pattern.size();
+    size_t idx = 0;
+    int count = 0;
+    while ((idx = str.find(pattern, idx)) != string::npos) {
+        ++count;
+        /**
+         * kmp algorithm, pattern failed function idea
+         * no need to traceback one character like ++idx
+         * but to escape pattern.size() since no common part for pattern
+         */
+        idx += strSize;
+        if (idx >= str.size()) break;
+    }
+    idx = 0;
+    while ((idx = str.find(pattern1, idx)) != string::npos) {
+        ++count;
+        idx += strSize;
+        if (idx >= str.size()) break;
+    }
+    return count;
+}
+
+int countOptiverOccurrences(vector<string> characterGrid) {
+    int count = 0;
+    for (string &s : characterGrid) {
+        count += getOptiverCount(s);
+    }
+
+    if (characterGrid.size() > 0) {
+        int row = characterGrid.size();
+        int column = characterGrid[0].size();
+
+        vector<string> transposeGrid;
+        transposeGrid.resize(column);
+        for (int i = 0; i < column; ++i) {
+            transposeGrid[i].resize(row + 1, '\0');
+        }
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < column; ++j) {
+                transposeGrid[j][i] = characterGrid[i][j];
+            }
+        }
+
+        for (string &s : transposeGrid) {
+            count += getOptiverCount(s);
+        }
+    }
+    return count;
+}
+
+/**
+ * given a matrix, find occurrence of OPTIVER
+ * horizontal order, horizontal reverse order, vertical order, vertical reverse order
+ */
+void test_occurrence_in_matrix() {
+    vector<string> characterGrid{{"SJQLFPQKJQLFPQK"}, {"JDDPQDMDDDPQDMD"}, {"AQEROBPTQEROBPT"}, {"FOPTIVEROPTIVER"},
+                                 {"BJDLQPFKJDLQPFK"}, {"VJFPQIEFJFPQIEF"}, {"PQKDIQDPQKDIQDP"}, {"AERIDQPLERIDQPL"},
+                                 {"SJQLFPQKJQLFPQK"}, {"JDDPQDMDDDPQDMD"}, {"AQEROBPTQEROBPT"}, {"FOPTIVEROPTIVER"},
+                                 {"BJDLQPFKJDLQPFK"}, {"VJFPQIEFJFPQIEF"}, {"PQKDIQDPQKDIQDP"}, {"AERIDQPLERIDQPL"}};
+    cout << countOptiverOccurrences(characterGrid) << endl;
 }

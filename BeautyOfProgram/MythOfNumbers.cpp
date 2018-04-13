@@ -309,7 +309,7 @@ void max_sub_vector_sum() {
     int size = sizeof(a) / sizeof(int);
     vector<int> x(a, a + size);
     int endPos, startPos;
-    cout << max_sum_one_dimension_vector(x, startPos, endPos);
+    cout << "max_sub_vector_sum: " << max_sum_one_dimension_vector(x, startPos, endPos);
     cout << " start : " << startPos << " to : " << endPos << endl;
 }
 int parse_number(vector<int> &num) {
