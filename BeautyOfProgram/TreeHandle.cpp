@@ -4,19 +4,19 @@ struct TreeNode {
     int data;
     TreeNode* left;
     TreeNode* right;
-    int leftMaxValue;   //左子树最长距离
-    int rightMaxValue;  //右子树最长距离
+    int leftMaxValue;   // 左子树最长距离
+    int rightMaxValue;  // 右子树最长距离
 };
 
-void build_by_preorder_inorder();  //根据先序和中序遍历结果构建树
-//根据先序和中序遍历结果构建树
+void build_by_preorder_inorder();  // 根据先序和中序遍历结果构建树
+// 根据先序和中序遍历结果构建树
 TreeNode* build_by_preorder_inorder(vector<int>& preorder, vector<int>& inorder, int pStart, int pEnd, int iStart,
                                     int iEnd);
-void level_order(TreeNode* root);              //按层次遍历
-void findMaxLen(TreeNode* root, int* maxLen);  //树中节点间的最大距离  No.3.8
+void level_order(TreeNode* root);              // 按层次遍历
+void findMaxLen(TreeNode* root, int* maxLen);  // 树中节点间的最大距离  No.3.8
 
 int main() {
-    build_by_preorder_inorder();  //重建二叉树 No. 3.9  层次遍历 No. 3.10
+    build_by_preorder_inorder();  // 重建二叉树 No. 3.9  层次遍历 No. 3.10
     return 0;
 }
 
@@ -47,7 +47,7 @@ void level_order(TreeNode* root) {
     }
     cout << endl;
 }
-//根据先序和中序遍历结果构建树
+// 根据先序和中序遍历结果构建树
 void build_by_preorder_inorder() {
     vector<int> preorder{1, 2, 4, 3, 5, 6};
     vector<int> inorder{4, 2, 1, 5, 3, 6};
@@ -56,7 +56,7 @@ void build_by_preorder_inorder() {
     cout << root->data << endl;
     level_order(root);
 }
-//根据先序和中序遍历结果构建树
+// 根据先序和中序遍历结果构建树
 TreeNode* build_by_preorder_inorder(vector<int>& preorder, vector<int>& inorder, int pStart, int pEnd, int iStart,
                                     int iEnd) {
     TreeNode* root = new TreeNode;

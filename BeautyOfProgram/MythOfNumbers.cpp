@@ -1,12 +1,10 @@
 #include "MyUtility.h"
 
-void find_abnormal_number();  // 异形数，数组中有三个数字出现一次，其余出现2次，找出3个中的任意一个
-void count_one_in_binary_number(unsigned int num);  // 二进制数中1的个数
-void factorial_last_zeros(int num);                 // 阶乘末尾0的个数
-void count_of_ones(int num);      // 从1到num的整数中1出现的次数，统计个十百位1的个数
-int gcd(int x, int y);            // 求x,y 的最大公约数
-void find_fittest_number(int N);  // 给定N，找到最小的M使得乘积N*M的十进制表达式中只有0和1
-void max_sub_vector_sum();        // 数组子数组之和最大值
+void factorial_last_zeros(int num);  // 阶乘末尾0的个数
+void count_of_ones(int num);         // 从1到num的整数中1出现的次数，统计个十百位1的个数
+int gcd(int x, int y);               // 求x,y 的最大公约数
+void find_fittest_number(int N);     // 给定N，找到最小的M使得乘积N*M的十进制表达式中只有0和1
+void max_sub_vector_sum();           // 数组子数组之和最大值
 int max_sum_one_dimension_vector(vector<int> &a, int &sureStartPos, int &endPos);
 void max_sum_sub_two_dimension_vectors();  // 二维数组最大子数组和
 void max_ascend_sub_vector();              // 最长递增子序列
@@ -17,14 +15,14 @@ void calc_asymptotic_value();              // 渐近求值，求 y = x^2 的极�
 void antCrawlTime();                       // 蚂蚁爬杆最短最长时间
 void last_num_wangyi();                    // 网易题目 199循环队列 逢二删除 求最后一个数字
 void chinese_left_theorem();               // 中国剩余定理
+void int2roman();
 
 int main() {
-    count_one_in_binary_number(7);  // 二进制数中1的个数  No. 2.1
-    factorial_last_zeros(26);       // 阶乘末尾0的个数    No. 2.2
-    count_of_ones(9999);            // 从1到num的整数中1出现的次数  No. 2.4
-    cout << gcd(9, 4) << endl;      // 求最大公约数 No. 2.7
-    find_fittest_number(22);        // 给定N，找到最小的M使得乘积N*M的十进制表达式中只有0和1
-    max_sub_vector_sum();           // 数组子数组之和最大值 No.2.14
+    factorial_last_zeros(26);   // 阶乘末尾0的个数    No. 2.2
+    count_of_ones(9999);        // 从1到num的整数中1出现的次数  No. 2.4
+    cout << gcd(9, 4) << endl;  // 求最大公约数 No. 2.7
+    find_fittest_number(22);    // 给定N，找到最小的M使得乘积N*M的十进制表达式中只有0和1
+    max_sub_vector_sum();       // 数组子数组之和最大值 No.2.14
     max_sum_sub_two_dimension_vectors();  // 二维数组最大子数组和  No. 2.15
     max_ascend_sub_vector();              // 最长递增子序列   No. 2.16
     right_shift();                        // 右移k位  No. 2.17
@@ -33,37 +31,9 @@ int main() {
     calc_asymptotic_value();  // 渐近求值，求 y = x^2 的极小值
     last_num_wangyi();        // 网易题目 199循环队列 逢二删除 求最后一个数字
     chinese_left_theorem();   // 中国剩余定理
-    find_abnormal_number();  // 异形数，数组中有三个数字出现一次，其余出现2次，找出3个中的任意一个
-    antCrawlTime();  // 蚂蚁爬杆最短最长时间        No. 4.7
+    antCrawlTime();           // 蚂蚁爬杆最短最长时间        No. 4.7
+    int2roman();
     return 0;
-}
-
-// low bit表示的是某个数从右往左扫描第一次出现1的位置
-int low_bit(int x) { return x & ~(x - 1); }
-
-void find_abnormal_number() {
-    int a[] = {1, 3, 7, 9, 5, 9, 4, 3, 6, 1, 7};  // 4,5,6
-    int n = sizeof(a) / sizeof(int);
-    int xorValue = 0;
-    for (int i = 0; i < n; i++) xorValue ^= a[i];
-    int num = 0;  // 三个数两两的异或后lowbit有两个相同，一个不同，可以分为两组
-    for (int i = 0; i < n; i++) {
-        // 表示的是：num = low_bit(a^b) ^ low_bit(a^c) ^ low_bit(b^c) 两个相同的会抵消掉  留下末尾1不同的数字
-        num ^= low_bit(xorValue ^ a[i]);
-    }
-
-    int b = 0;
-    for (int i = 0; i < n; i++) {
-        /**
-         * 如果a[i]是三个不同的数中的一个的话，则其中两个异或xor结果的low_bit和num不同，只有一个相同，
-         * 如果a[i]不是三个数中的话，则如果以后结果符合，由于他们每个数都有两个，再和b异或后就变为0，
-         * 所以b最后是那三个不同的数的一个。
-         */
-        if (low_bit(xorValue ^ a[i]) == num) {
-            b ^= a[i];
-        }
-    }
-    cout << "find_abnormal_number : " << b << endl;
 }
 
 // 中国剩余定理
@@ -382,20 +352,6 @@ void count_of_ones(int num) {
     cout << cnt << endl;
 }
 
-// 二进制数中1的个数
-void count_one_in_binary_number(unsigned int num) {
-    int cnt = 0;
-    // while(num){              //O(总位数)
-    //     cnt  += num & 0x1;
-    //     num >>= 1;           //右移一位
-    // }
-    while (num) {          // O(1的个数)
-        num &= (num - 1);  // 每次消掉最低位1
-        ++cnt;
-    }
-    cout << cnt << endl;
-}
-
 void factorial_last_zeros(int num) {  // 2^m * 5^k  m>k 所以求5的因子分解个数
     int cnt = 0, factor = 5;
     // for (int i = 1; i <= num; ++i) {
@@ -410,4 +366,47 @@ void factorial_last_zeros(int num) {  // 2^m * 5^k  m>k 所以求5的因子分�
         factor *= 5;
     }
     cout << cnt << endl;
+}
+
+class Int2Roman {
+public:
+    vector<int> number{1, 5, 10, 50, 100, 500, 1000};
+    vector<char> roman{'I', 'V', 'X', 'L', 'C', 'D', 'M'};
+    int len = 7;
+
+    string intToRoman(int num) {
+        if (num < 1 || num > 3999) return "";
+
+        ostringstream oss;
+        int bit = len - 1;
+        while (bit >= 0 && num > 0) {
+            int remain = num / number[bit];
+            if (remain == 9) {
+                oss << roman[bit] << roman[bit + 2];
+            } else if (remain == 4) {
+                oss << roman[bit] << roman[bit + 1];
+            } else if (remain > 4) {
+                oss << roman[bit + 1];
+                append(oss, roman[bit], remain - 5);
+            } else if (remain > 0) {
+                append(oss, roman[bit], remain);
+            }
+            num -= remain * number[bit];
+            bit -= 2;
+        }
+        return oss.str();
+    }
+
+    void append(ostringstream &oss, char c, int time) {
+        for (int i = 0; i < time; ++i) {
+            oss << c;
+        }
+    }
+};
+
+void int2roman() {
+    Int2Roman s;
+    cout << s.intToRoman(1994) << endl;
+    cout << s.intToRoman(58) << endl;
+    cout << s.intToRoman(4) << endl;
 }

@@ -14,7 +14,7 @@ public:
     Sack(int *w, int *p, int *m, int len, int totalW);
     void zero_one_sack_basic();      // 0-1背包 基本解法
     void zero_one_sack_space_opt();  // 0-1背包 空间优化解法
-    void multi_sack();               //多重背包
+    void multi_sack();               // 多重背包
 };
 
 void test_Sack();
@@ -70,15 +70,15 @@ void Sack::zero_one_sack_basic() {
     vector<vector<int> > f;
     initValue = 0;
     make_two_dimension_vector(M + 1, totalWeight + 1, initValue, f);
-    int notpackvalue = 0, packvalue = 0;  // 记录i件物品不装入和装入时的总价值
+    int noPackValue = 0, packValue = 0;  // 记录i件物品不装入和装入时的总价值
     for (int i = 1; i <= M; ++i) {
         for (int j = 1; j <= totalWeight; ++j) {
             if (j >= weights[i])
-                packvalue = f[i - 1][j - weights[i]] + prices[i];  // 装入物品i，则前 i-1 件的总空间变为 j - weights[i]
+                packValue = f[i - 1][j - weights[i]] + prices[i];  // 装入物品i，则前 i-1 件的总空间变为 j - weights[i]
             else
-                packvalue = initValue;
-            notpackvalue = f[i - 1][j];  // 不装入物品 i 的总价值
-            f[i][j] = max(packvalue, notpackvalue);
+                packValue = initValue;
+            noPackValue = f[i - 1][j];  // 不装入物品 i 的总价值
+            f[i][j] = max(packValue, noPackValue);
         }
     }
     cout << f << endl;
@@ -89,15 +89,15 @@ void Sack::zero_one_sack_space_opt() {
     initValue = 0;
     f.resize(totalWeight + 1, initValue);
     cout << f << endl;
-    int notpackvalue = 0, packvalue = 0;  // 记录i件物品不装入和装入时的总价值
+    int noPackValue = 0, packValue = 0;  // 记录i件物品不装入和装入时的总价值
     for (int i = 1; i <= M; ++i) {
         for (int j = totalWeight; j >= 0; --j) {
             if (j >= weights[i])
-                packvalue = f[j - weights[i]] + prices[i];  // 装入物品i，则前 i-1 件的总空间变为 j - weights[i]
+                packValue = f[j - weights[i]] + prices[i];  // 装入物品i，则前 i-1 件的总空间变为 j - weights[i]
             else
-                packvalue = initValue;
-            notpackvalue = f[j];  // 不装入物品 i 的总价值
-            f[j] = max(packvalue, notpackvalue);
+                packValue = initValue;
+            noPackValue = f[j];  // 不装入物品 i 的总价值
+            f[j] = max(packValue, noPackValue);
         }
     }
     cout << f << endl;

@@ -66,6 +66,7 @@ int possible_path_count(int steps, int x, int y) {
     x = abs(x);
     y = abs(y);
     int count = 0;
+    // at least move (x + y), the rest can choose 2 * i go x direction, (steps - x - y - 2 * i) go y direction
     for (int i = 0; i <= (steps - x - y) / 2; ++i) {
         /**
          * total steps, must x left, y up

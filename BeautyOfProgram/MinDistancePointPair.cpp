@@ -48,17 +48,25 @@ double MinDistancePointPair::divide_conquer(int low, int up) {
     minValue = min(divide_conquer(low, middle), divide_conquer(middle + 1, up));
     if ((up - low) % 2 == 0) {  // 奇数个点
         middleValue = (points[middle].x + points[middle + 1].x) / 2;
-    } else {
+    } else {  // 偶数个点
         middleValue = points[middle].x;
-    }  // 偶数个点
+    }
+
     lowValue = middleValue - minValue;
     upValue = middleValue + minValue;
+    /**
+     * rule out those points' x <= lowValue and x >= upValue
+     */
     for (i = middle; i >= low && points[i].x > lowValue; --i)
         ;
-    if (points[i].x < lowValue) ++i;
+
+    if (points[i].x < lowValue) ++i;  // boundary check
+
     for (j = middle + 1; j <= up && points[j].x < upValue; ++j)
         ;
-    if (points[j].x > upValue) --j;
+
+    if (points[j].x > upValue) --j;  // boundary check
+
     return min(minValue, brutal_force(i, j));
 }
 

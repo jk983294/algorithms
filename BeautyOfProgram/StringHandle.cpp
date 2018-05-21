@@ -5,6 +5,7 @@ void longest_palindrome_sub_string();               // 最长回文子串  Manac
 bool str_contain_circle_shift(string a, string b);  // 字符串移位包含问题
 int similarity_of_two_string(string a, string b);  // 两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
 int similarity_of_two_string(string &a, int aBegin, int aEnd, string &b, int bBegin, int bEnd);
+int similarity_of_two_string_dp(string a, string b);
 void test_occurrence_in_matrix();  // optiver interview question 1
 
 int main() {
@@ -12,6 +13,8 @@ int main() {
     longest_palindrome_sub_string();                               // 最长回文串
     cout << str_contain_circle_shift("AABCD", "CDAA") << endl;     // 字符串移位包含问题 No. 3.1
     cout << similarity_of_two_string("dfjsdf", "kdfasd") << endl;  // 字符串相似度 No. 3.3
+    cout << similarity_of_two_string_dp("intention", "execution") << endl;
+    cout << similarity_of_two_string_dp("horse", "ros") << endl;
     test_occurrence_in_matrix();
     return 0;
 }
@@ -36,7 +39,7 @@ void longest_palindrome_sub_string() {
         else
             p[i] = 1;  // p[i]超出边界mx，设置为1，然后慢慢累加计算长度
         while (i + p[i] < size1 && newStr[i - p[i]] == newStr[i + p[i]]) ++p[i];
-        if (i + p[i] > mx) {  //更新边界mx以及当前最大回文子串的中心id
+        if (i + p[i] > mx) {  // 更新边界mx以及当前最大回文子串的中心id
             mx = i + p[i];
             id = i;
         }
@@ -66,20 +69,51 @@ int similarity_of_two_string(string &a, int aBegin, int aEnd, string &b, int bBe
     } else if (a[aBegin] == b[bBegin]) {
         return similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin + 1, bEnd);
     } else {
-        //将b[bBegin]拷到a串对应处  或者 将b[bBegin]在b中删除
+        // 将b[bBegin]拷到a串对应处  或者 将b[bBegin]在b中删除
         int sim1 = similarity_of_two_string(a, aBegin, aEnd, b, bBegin + 1, bEnd);
-        //将a[aBegin]拷到b串对应处  或者 将a[aBegin]在a中删除
+        // 将a[aBegin]拷到b串对应处  或者 将a[aBegin]在a中删除
         int sim2 = similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin, bEnd);
-        //将a[aBegin]修改为b[bBegin]  或者 将b[bBegin]修改为a[aBegin]
+        // 将a[aBegin]修改为b[bBegin]  或者 将b[bBegin]修改为a[aBegin]
         int sim3 = similarity_of_two_string(a, aBegin + 1, aEnd, b, bBegin + 1, bEnd);
         return min(sim1, min(sim2, sim3)) + 1;
     }
 }
 
-//两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
+// 两个字符串的相似度 1. 修改一个字符 2. 增加一个字符 3. 删除一个字符
 int similarity_of_two_string(string a, string b) {
     int lenA = a.size(), lenB = b.size();
     return similarity_of_two_string(a, 0, lenA - 1, b, 0, lenB - 1);
+}
+
+int similarity_of_two_string_dp(string word1, string word2) {
+    int m = word1.size();
+    int n = word2.size();
+
+    if (m == 0) return n;
+    if (n == 0) return m;
+
+    vector<vector<int>> d;  // d[i][j] = the edit distance between word1[1..i] and word2[1..j]
+    d.resize(m + 1);
+    for (int i = 0; i < m + 1; ++i) {
+        d[i].resize(n + 1, 0);
+    }
+    for (int i = 0; i < m + 1; ++i) {
+        d[i][0] = i;
+    }
+    for (int j = 0; j < n + 1; ++j) {
+        d[0][j] = j;
+    }
+    for (int i = 1; i < m + 1; ++i) {
+        for (int j = 1; j < n + 1; ++j) {
+            d[i][j] = min(d[i - 1][j], d[i][j - 1]) + 1;  // delete or insert
+            if (word1[i - 1] == word2[j - 1]) {           // no need to replace
+                d[i][j] = min(d[i][j], d[i - 1][j - 1]);
+            } else {  // replace
+                d[i][j] = min(d[i][j], d[i - 1][j - 1] + 1);
+            }
+        }
+    }
+    return d[m][n];
 }
 
 //字符串移位包含问题
