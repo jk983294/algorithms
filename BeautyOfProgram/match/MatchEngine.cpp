@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <map>
 #include <memory>
 #include <sstream>
@@ -53,8 +54,8 @@ string process_str(const string& str) {
 
 class match_system {
 public:
-    map<long long, vector<shared_ptr<order>>, greater<long long>> bidBook;
-    map<long long, vector<shared_ptr<order>>> askBook;
+    map<long long, std::list<shared_ptr<order>>, greater<long long>> bidBook;
+    map<long long, std::list<shared_ptr<order>>> askBook;
     map<string, shared_ptr<order>> id2order;
 
     void trade() {
@@ -175,11 +176,11 @@ public:
         long long fill_count = 0;
         if (o->price > 0 && o->qty > 0) {
             if (o->isBuy) {
-                auto mapItr = askBook.begin();
-                while (o->remain_qty() > 0 && mapItr != askBook.end()) {
-                    if (mapItr->first <= o->price) {
-                        auto vectorItr = mapItr->second.begin();
-                        for (; vectorItr != mapItr->second.end(); ++vectorItr) {
+                auto askLevelItr = askBook.begin();
+                while (o->remain_qty() > 0 && askLevelItr != askBook.end()) {
+                    if (askLevelItr->first <= o->price) {
+                        auto vectorItr = askLevelItr->second.begin();
+                        for (; vectorItr != askLevelItr->second.end(); ++vectorItr) {
                             order& askOrder = *(*vectorItr);
                             if (!askOrder.cancelled) {
                                 if (askOrder.remain_qty() >= o->remain_qty()) {
@@ -188,31 +189,33 @@ public:
                                     fill_count = askOrder.remain_qty();
                                 }
                                 print_trade(askOrder, *o, fill_count);
+                                if (o->remain_qty() == 0) break;
                             }
                         }
-                        if (vectorItr != mapItr->second.end() && (*vectorItr)->remain_qty() == 0) {
+                        if (vectorItr != askLevelItr->second.end() && (*vectorItr)->remain_qty() == 0) {
                             ++vectorItr;
                         }
-                        remove_order(mapItr->second, vectorItr);
+                        remove_order(askLevelItr->second, vectorItr);
                     } else {
                         break;
                     }
-                    ++mapItr;
+                    if (o->remain_qty() == 0) break;
+                    ++askLevelItr;
                 }  // end while
-                if (mapItr != askBook.end() && mapItr->second.empty()) {
-                    ++mapItr;
+                if (askLevelItr != askBook.end() && askLevelItr->second.empty()) {
+                    ++askLevelItr;
                 }
-                askBook.erase(askBook.begin(), mapItr);
+                askBook.erase(askBook.begin(), askLevelItr);
 
                 if (o->remain_qty() > 0 && o->isGfd) {
                     add_buy_list(o);
                 }
             } else {  // sell
-                auto mapItr = bidBook.begin();
-                while (o->remain_qty() > 0 && mapItr != bidBook.end()) {
-                    if (mapItr->first >= o->price) {
-                        auto vectorItr = mapItr->second.begin();
-                        for (; vectorItr != mapItr->second.end(); ++vectorItr) {
+                auto bidLevelItr = bidBook.begin();
+                while (o->remain_qty() > 0 && bidLevelItr != bidBook.end()) {
+                    if (bidLevelItr->first >= o->price) {
+                        auto vectorItr = bidLevelItr->second.begin();
+                        for (; vectorItr != bidLevelItr->second.end(); ++vectorItr) {
                             order& bidOrder = *(*vectorItr);
                             if (!bidOrder.cancelled) {
                                 if ((*vectorItr)->remain_qty() >= o->remain_qty()) {
@@ -221,21 +224,23 @@ public:
                                     fill_count = (*vectorItr)->remain_qty();
                                 }
                                 print_trade(*(*vectorItr), *o, fill_count);
+                                if (o->remain_qty() == 0) break;
                             }
                         }
-                        if (vectorItr != mapItr->second.end() && (*vectorItr)->remain_qty() == 0) {
+                        if (vectorItr != bidLevelItr->second.end() && (*vectorItr)->remain_qty() == 0) {
                             ++vectorItr;
                         }
-                        remove_order(mapItr->second, vectorItr);
+                        remove_order(bidLevelItr->second, vectorItr);
                     } else {
                         break;
                     }
-                    ++mapItr;
+                    if (o->remain_qty() == 0) break;
+                    ++bidLevelItr;
                 }  // end while
-                if (mapItr != bidBook.end() && mapItr->second.empty()) {
-                    ++mapItr;
+                if (bidLevelItr != bidBook.end() && bidLevelItr->second.empty()) {
+                    ++bidLevelItr;
                 }
-                bidBook.erase(bidBook.begin(), mapItr);
+                bidBook.erase(bidBook.begin(), bidLevelItr);
 
                 if (o->remain_qty() > 0 && o->isGfd) {
                     add_sell_list(o);
@@ -244,7 +249,7 @@ public:
         }
     }
 
-    void remove_order(vector<shared_ptr<order>>& orders, vector<shared_ptr<order>>::iterator itr1) {
+    void remove_order(std::list<shared_ptr<order>>& orders, std::list<shared_ptr<order>>::iterator itr1) {
         for (auto i = orders.begin(); i != itr1; ++i) {
             id2order.erase((*i)->orderId);
         }

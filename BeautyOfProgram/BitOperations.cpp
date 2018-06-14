@@ -1,3 +1,4 @@
+#include <climits>
 #include "MyUtility.h"
 
 template <class T>
@@ -10,6 +11,12 @@ T flipBit5(T x) {
 
 void count_one_in_binary_number(unsigned int num);  // 二进制数中1的个数
 void find_abnormal_number();  // 异形数，数组中有三个数字出现一次，其余出现2次，找出3个中的任意一个
+int get_number_sign(int n);
+bool is_same_sign(int x, int y);
+unsigned int bit_abs(int n);
+int bit_min(int x, int y);
+int bit_max(int x, int y);
+bool is_power_two(int n);
 
 int main() {
     count_one_in_binary_number(7);  // 二进制数中1的个数  No. 2.1
@@ -19,8 +26,42 @@ int main() {
     cout << "flipBit5 test: " << flipBit5(47) << endl;  // 101111 => 111111
     cout << "flipBit5 test: " << flipBit5(-63) << endl;
     cout << "flipBit5 test: " << flipBit5(-47) << endl;
+
+    cout << "number sign of 42: " << get_number_sign(42) << endl;    // 1
+    cout << "number sign of 0: " << get_number_sign(0) << endl;      // 0
+    cout << "number sign of -42: " << get_number_sign(-42) << endl;  // -1
+
+    cout << is_same_sign(4, 2) << endl;   // 1
+    cout << is_same_sign(4, -2) << endl;  // 0
+    cout << is_same_sign(4, 0) << endl;   // 0
+    cout << is_same_sign(-4, 0) << endl;  // 0
+    cout << is_same_sign(0, 0) << endl;   // 1
+
+    cout << bit_abs(42) << endl;   // 42
+    cout << bit_abs(-42) << endl;  // 42
+    cout << bit_abs(0) << endl;    // 0
+
+    cout << bit_min(4, -2) << endl;  // -2
+    cout << bit_max(4, 2) << endl;   // 4
+
+    cout << is_power_two(42) << endl;   // 0
+    cout << is_power_two(128) << endl;  // 1
     return 0;
 }
+
+bool is_power_two(int v) { return v && !(v & (v - 1)); }
+
+int get_number_sign(int n) { return (n != 0) | -(int)((unsigned int)((int)n) >> (sizeof(int) * CHAR_BIT - 1)); }
+
+bool is_same_sign(int x, int y) { return (x == 0 && y == 0) || (x != 0 && y != 0 && (x ^ y) > 0); }
+
+unsigned int bit_abs(int v) {
+    int const mask = v >> (sizeof(int) * CHAR_BIT - 1);
+    return static_cast<unsigned int>((v + mask) ^ mask);
+}
+
+int bit_min(int x, int y) { return y ^ ((x ^ y) & -(x < y)); }
+int bit_max(int x, int y) { return x ^ ((x ^ y) & -(x < y)); }
 
 // 二进制数中1的个数
 void count_one_in_binary_number(unsigned int num) {

@@ -1,0 +1,16 @@
+UNITS: 3
+a := sum
+b := negate
+c := sum
+INPUTS: 2
+CONNECTIONS: 6
+input/0 -- a/in/0
+input/1 -- a/in/1
+a/out/0 -- c/in/0
+a/out/0 -- b/in/0
+b/out/0 -- c/in/1
+c/out/0 -- result
+VALUES: 3
+input/0 := 3
+input/1 := 5
+input/0 := 7
