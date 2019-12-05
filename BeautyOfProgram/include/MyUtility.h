@@ -2,9 +2,11 @@
 #define MYUTILITY_H
 
 #include <algorithm>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <stack>
@@ -117,7 +119,7 @@ inline std::ostream& operator<<(std::ostream& os, const vector<Type>& v) {
 }
 template <typename Type>
 inline std::ostream& operator<<(std::ostream& os, const vector<vector<Type> >& v) {
-    for (unsigned int i = 0; i < v.size(); i++) os << "Subvector " << i << "\n" << v[i] << std::endl;
+    for (unsigned int i = 0; i < v.size(); i++) os << i << ":\t\t" << v[i] << std::endl;
     return (os);
 }
 

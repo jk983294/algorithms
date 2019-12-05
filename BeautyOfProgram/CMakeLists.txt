@@ -12,6 +12,7 @@ message ("cxx Flags: " ${CMAKE_CXX_FLAGS})
 
 # Source code
 include_directories("/home/$USER/include")
+include_directories("./include")
 
 file( GLOB APP_SOURCES "*.cpp" "*/*.cpp" )
 foreach( sourcefile ${APP_SOURCES} )
