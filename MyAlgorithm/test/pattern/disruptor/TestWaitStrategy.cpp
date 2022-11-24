@@ -13,7 +13,7 @@ TEST_CASE("WaitForCursor", "[BusySpinStrategy]") {
     Sequence cursor;
     std::vector<Sequence*> dependents;
     BusySpinStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::thread waiter([&]() { returnValue.store(strategy.WaitFor(FirstSequenceValue, cursor, dependents, alerted)); });
 
@@ -30,7 +30,7 @@ TEST_CASE("Signal Timeout Waiting On Cursor", "[BusySpinStrategy]") {
     Sequence cursor;
     std::vector<Sequence*> dependents;
     BusySpinStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -59,7 +59,7 @@ TEST_CASE("WaitForDependents", "[BusySpinStrategy]") {
     Sequence seq3;
     std::vector<Sequence*> dependents;
     BusySpinStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -90,7 +90,7 @@ TEST_CASE("SignalAlertWaitingOnDependents", "[BusySpinStrategy]") {
     Sequence seq3;
     std::vector<Sequence*> dependents;
     BusySpinStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -120,7 +120,7 @@ TEST_CASE("YieldingStrategy WaitForCursor", "[YieldingStrategy]") {
     Sequence cursor;
     std::vector<Sequence*> dependents;
     YieldingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::thread waiter([&]() { returnValue.store(strategy.WaitFor(FirstSequenceValue, cursor, dependents, alerted)); });
 
@@ -137,7 +137,7 @@ TEST_CASE("YieldingStrategy Signal Timeout Waiting On Cursor", "[YieldingStrateg
     Sequence cursor;
     std::vector<Sequence*> dependents;
     YieldingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -166,7 +166,7 @@ TEST_CASE("YieldingStrategy WaitForDependents", "[YieldingStrategy]") {
     Sequence seq3;
     std::vector<Sequence*> dependents;
     YieldingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -197,7 +197,7 @@ TEST_CASE("YieldingStrategy SignalAlertWaitingOnDependents", "[YieldingStrategy]
     Sequence seq3;
     std::vector<Sequence*> dependents;
     YieldingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -227,7 +227,7 @@ TEST_CASE("SleepingStrategy WaitForCursor", "[SleepingStrategy]") {
     Sequence cursor;
     std::vector<Sequence*> dependents;
     SleepingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::thread waiter([&]() { returnValue.store(strategy.WaitFor(FirstSequenceValue, cursor, dependents, alerted)); });
 
@@ -244,7 +244,7 @@ TEST_CASE("SleepingStrategy Signal Timeout Waiting On Cursor", "[SleepingStrateg
     Sequence cursor;
     std::vector<Sequence*> dependents;
     SleepingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -273,7 +273,7 @@ TEST_CASE("SleepingStrategy WaitForDependents", "[SleepingStrategy]") {
     Sequence seq3;
     std::vector<Sequence*> dependents;
     SleepingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -304,7 +304,7 @@ TEST_CASE("SleepingStrategy SignalAlertWaitingOnDependents", "[SleepingStrategy]
     Sequence seq3;
     std::vector<Sequence*> dependents;
     SleepingStrategy<> strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -334,7 +334,7 @@ TEST_CASE("BlockingStrategy WaitForCursor", "[BlockingStrategy]") {
     Sequence cursor;
     std::vector<Sequence*> dependents;
     BlockingStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::thread waiter([&]() { returnValue.store(strategy.WaitFor(FirstSequenceValue, cursor, dependents, alerted)); });
 
@@ -351,7 +351,7 @@ TEST_CASE("BlockingStrategy Signal Timeout Waiting On Cursor", "[BlockingStrateg
     Sequence cursor;
     std::vector<Sequence*> dependents;
     BlockingStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -380,7 +380,7 @@ TEST_CASE("BlockingStrategy WaitForDependents", "[BlockingStrategy]") {
     Sequence seq3;
     std::vector<Sequence*> dependents;
     BlockingStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
@@ -411,7 +411,7 @@ TEST_CASE("BlockingStrategy SignalAlertWaitingOnDependents", "[BlockingStrategy]
     Sequence seq3;
     std::vector<Sequence*> dependents;
     BlockingStrategy strategy;
-    std::atomic<bool> alerted;
+    std::atomic<bool> alerted{false};
 
     std::atomic<int64_t> returnValue(InitialCursorValue);
 
