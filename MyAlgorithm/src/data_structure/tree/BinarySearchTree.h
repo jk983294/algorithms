@@ -1,6 +1,7 @@
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
 
+#include <tuple>
 #include "BinaryTree.h"
 
 template <class T>
@@ -12,6 +13,37 @@ public:
     bool deleteKey(T key);
     // 合并两棵有序树，左树key全部小于右树，左树最大节点为根，返回树根节点指针
     TreeNode<T> *TwoWayJoin(TreeNode<T> *left, TreeNode<T> *right);
+    // predecessor and successor for a given key
+    std::pair<TreeNode<T> *, TreeNode<T> *> findPreSuc(TreeNode<T> *root, T key) {
+        TreeNode<T> *pre = nullptr;
+        TreeNode<T> *suc = nullptr;
+
+        while (true) {
+            if (root == nullptr) return {pre, suc};
+            if (root->data == key) {
+                if (root->left != nullptr) {
+                    auto *tmp = root->left;
+                    while (tmp->right) tmp = tmp->right;
+                    pre = tmp;
+                }
+
+                if (root->right != nullptr) {
+                    auto *tmp = root->right;
+                    while (tmp->left) tmp = tmp->left;
+                    suc = tmp;
+                }
+                return {pre, suc};
+            }
+
+            if (root->data > key) {
+                suc = root;
+                root = root->left;
+            } else {
+                pre = root;
+                root = root->right;
+            }
+        }
+    }
 };
 
 template <class T>

@@ -2,3 +2,5 @@
 cmake-build-debug/
 *.pyc
 *.gch
+.vscode/
+**/build/

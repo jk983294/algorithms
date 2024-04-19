@@ -5,6 +5,8 @@
 
 #include <chrono>
 #include <condition_variable>
+#include <functional>
+#include <mutex>
 #include <thread>
 #include <vector>
 
@@ -302,6 +304,6 @@ static inline std::function<int64_t()> buildMinSequenceFunction(const Sequence& 
     else
         return [&dependents]() { return GetMinimumSequence(dependents); };
 }
-}
+}  // namespace disruptor
 
 #endif
