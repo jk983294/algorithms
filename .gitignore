@@ -4,3 +4,4 @@ cmake-build-debug/
 *.gch
 .vscode/
 **/build/
+*.out
